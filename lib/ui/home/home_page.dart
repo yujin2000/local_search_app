@@ -44,6 +44,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  /// 검색된 주소 아이템
   Padding item() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
