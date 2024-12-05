@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:local_search_app/core/geolocator_helper.dart';
 import 'package:local_search_app/data/model/location.dart';
 import 'package:local_search_app/ui/detail/detail_page.dart';
 import 'package:local_search_app/ui/home/home_view_model.dart';
@@ -49,6 +50,22 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
           ),
+          actions: [
+            GestureDetector(
+              onTap: () async {
+                final position = await GeolocatorHelper.getPosition();
+
+                if (position != null) {
+                  // TODO: 상태 업데이트하기 구현
+                }
+              },
+              child: Container(
+                height: 50,
+                width: 50,
+                child: Icon(Icons.gps_fixed),
+              ),
+            ),
+          ],
         ),
         body: Column(
           children: [
