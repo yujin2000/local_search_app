@@ -40,6 +40,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             child: TextField(
               controller: controller,
               onSubmitted: (value) => onSubmitted(value),
+              style: const TextStyle(fontSize: 15),
               decoration: InputDecoration(
                 hintText: '검색어를 입력해 주세요',
                 border: OutlineInputBorder(
