@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class DetailPage extends StatelessWidget {
   String link;
@@ -8,7 +9,11 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Text('DetailPage'),
+      body: InAppWebView(
+        initialUrlRequest: URLRequest(
+          url: WebUri(link),
+        ),
+      ),
     );
   }
 }

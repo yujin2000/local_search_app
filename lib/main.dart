@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_search_app/ui/home/home_page.dart';
 
 void main() {
+  // inappwebview 와 플러터 바인딩
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
