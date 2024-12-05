@@ -1,11 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:local_search_app/data/model/location.dart';
 import 'package:local_search_app/ui/detail/detail_page.dart';
+import 'package:local_search_app/ui/home/home_view_model.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
   final controller = TextEditingController();
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  /// 검색
+  void onSubmitted(String query) {
+    // 뷰모델 읽기(read)
+    final vm = ref.read(homeViewModelProvider.notifier);
+    vm.searchLocations(query);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // 값이 변경되는지 확인(watch)
+    final locations = ref.watch(homeViewModelProvider);
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -15,6 +39,7 @@ class HomePage extends StatelessWidget {
           title: Container(
             child: TextField(
               controller: controller,
+              onSubmitted: (value) => onSubmitted(value),
               decoration: InputDecoration(
                 hintText: '검색어를 입력해 주세요',
                 border: OutlineInputBorder(
@@ -27,17 +52,19 @@ class HomePage extends StatelessWidget {
         body: Column(
           children: [
             SizedBox(height: 20),
-            Expanded(
-              child: ListView.separated(
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return item();
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: 20);
-                },
-              ),
-            ),
+            locations == null
+                ? SizedBox()
+                : Expanded(
+                    child: ListView.separated(
+                      itemCount: locations.length,
+                      itemBuilder: (context, index) {
+                        return item(locations[index]);
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 20);
+                      },
+                    ),
+                  ),
           ],
         ),
       ),
@@ -45,7 +72,7 @@ class HomePage extends StatelessWidget {
   }
 
   /// 검색된 주소 아이템
-  Padding item() {
+  Padding item(Location location) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Builder(builder: (context) {
@@ -53,7 +80,7 @@ class HomePage extends StatelessWidget {
           onTap: () {
             Navigator.push(context, MaterialPageRoute(
               builder: (context) {
-                return DetailPage();
+                return DetailPage(location.link);
               },
             ));
           },
@@ -74,18 +101,18 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '삼성1동 주민센터',
+                  location.title,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  '공공,사회기관>행정복지센터',
+                  location.category,
                   style: TextStyle(fontSize: 14),
                 ),
                 Text(
-                  '서울특벽시 강남구 봉은사로 616 삼성1동 주민센터',
+                  location.roadAddress,
                   style: TextStyle(fontSize: 14),
                 ),
               ],
