@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:local_search_app/data/model/Location.dart';
+import 'package:local_search_app/data/model/location.dart';
 
 class LocationRepository {
   static const clientId = 'kZGERaAVvVW1XM2SjeEG';
