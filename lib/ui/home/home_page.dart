@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_search_app/core/geolocator_helper.dart';
+import 'package:local_search_app/core/snackbar_util.dart';
 import 'package:local_search_app/data/model/location.dart';
 import 'package:local_search_app/ui/detail/detail_page.dart';
 import 'package:local_search_app/ui/home/home_view_model.dart';
@@ -97,11 +98,19 @@ class _HomePageState extends ConsumerState<HomePage> {
       child: Builder(builder: (context) {
         return GestureDetector(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return DetailPage(location.link);
-              },
-            ));
+            // link 시작이 http 면 페이지 이동
+            if (location.link.startsWith('http')) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return DetailPage(location.link);
+                  },
+                ),
+              );
+            } else {
+              SnackbarUtil.showSnackBar(context, '페이지가 존재하지 않습니다.');
+            }
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
