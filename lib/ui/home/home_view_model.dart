@@ -19,14 +19,15 @@ class HomeViewModel extends AutoDisposeNotifier<List<Location>?> {
     state = locationDatas;
   }
 
-  Future<void> searchByLatLng(double lat, double lng) async {
+  Future<String?> searchByLatLng(double lat, double lng) async {
     final vworldRepo = VworldRepository();
     final locationName = await vworldRepo.findByLatLng(lat, lng);
 
     // 가장 위치가 근접한 동네만 고르기
     if (locationName.isNotEmpty) {
-      await searchLocations(locationName[0]);
+      return locationName[0];
     }
+    return null;
   }
 }
 

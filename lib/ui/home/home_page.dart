@@ -58,12 +58,20 @@ class _HomePageState extends ConsumerState<HomePage> {
 
                 if (position != null) {
                   final vm = ref.read(homeViewModelProvider.notifier);
-                  vm.searchByLatLng(position.latitude, position.longitude);
+                  final findLocal = await vm.searchByLatLng(
+                      position.latitude, position.longitude);
+
+                  if (findLocal != null) {
+                    controller.text = findLocal;
+                    vm.searchLocations(findLocal);
+                  }
                 }
               },
               child: Container(
+                alignment: Alignment.centerLeft,
                 height: 50,
                 width: 50,
+                color: Colors.transparent,
                 child: Icon(Icons.gps_fixed),
               ),
             ),
