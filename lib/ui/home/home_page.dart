@@ -112,7 +112,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return DetailPage(location.link);
+                    return DetailPage(location.link, location.title);
                   },
                 ),
               );
