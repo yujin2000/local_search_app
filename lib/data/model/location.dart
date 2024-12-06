@@ -10,6 +10,8 @@
 //   "mapy": "375144424"
 // },
 
+import 'package:local_search_app/core/html_tag_util.dart';
+
 class Location {
   String title;
   String link;
@@ -26,7 +28,7 @@ class Location {
   /// Map 형식의 json 데이터를 객체로 변환
   Location.fromJson(Map<String, dynamic> map)
       : this(
-          title: map['title'],
+          title: HtmlTagUtil.replace(map['title']),
           link: map['link'],
           category: map['category'],
           roadAddress: map['roadAddress'],
