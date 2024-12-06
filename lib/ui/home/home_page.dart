@@ -56,7 +56,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                 final position = await GeolocatorHelper.getPosition();
 
                 if (position != null) {
-                  // TODO: 상태 업데이트하기 구현
+                  final vm = ref.read(homeViewModelProvider.notifier);
+                  vm.searchByLatLng(position.latitude, position.longitude);
                 }
               },
               child: Container(

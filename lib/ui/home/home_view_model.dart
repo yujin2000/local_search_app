@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_search_app/data/model/location.dart';
 import 'package:local_search_app/data/repository/location_repository.dart';
+import 'package:local_search_app/data/repository/vworld_repository.dart';
 
 // 1. 상태 클래스 만들기 -> List<Location>
 
@@ -13,9 +14,19 @@ class HomeViewModel extends AutoDisposeNotifier<List<Location>?> {
 
   Future<void> searchLocations(String query) async {
     final locationRepository = LocationRepository();
-    final books = await locationRepository.findByAddress(query);
+    final locationDatas = await locationRepository.findByAddress(query);
 
-    state = books;
+    state = locationDatas;
+  }
+
+  Future<void> searchByLatLng(double lat, double lng) async {
+    final vworldRepo = VworldRepository();
+    final locationName = await vworldRepo.findByLatLng(lat, lng);
+
+    // 가장 위치가 근접한 동네만 고르기
+    if (locationName.isNotEmpty) {
+      await searchLocations(locationName[0]);
+    }
   }
 }
 
