@@ -4,19 +4,38 @@ import 'package:local_search_app/data/repository/location_repository.dart';
 import 'package:local_search_app/data/repository/vworld_repository.dart';
 
 // 1. 상태 클래스 만들기 -> List<Location>
+class HomeState {
+  List<Location>? locations;
+  List<String>? searchTerms;
+
+  HomeState({
+    required this.locations,
+    required this.searchTerms,
+  });
+
+  HomeState copyWith({
+    List<Location>? locations,
+    List<String>? searchTerms,
+  }) {
+    return HomeState(
+      locations: locations ?? this.locations,
+      searchTerms: searchTerms ?? this.searchTerms,
+    );
+  }
+}
 
 // 2. 뷰모델 만들기
-class HomeViewModel extends AutoDisposeNotifier<List<Location>?> {
+class HomeViewModel extends AutoDisposeNotifier<HomeState> {
   @override
-  List<Location>? build() {
-    return null;
+  HomeState build() {
+    return HomeState(locations: null, searchTerms: null);
   }
 
   Future<void> searchLocations(String query) async {
     final locationRepository = LocationRepository();
     final locationDatas = await locationRepository.findByAddress(query);
 
-    state = locationDatas;
+    state = state.copyWith(locations: locationDatas);
   }
 
   Future<String?> searchByLatLng(double lat, double lng) async {
@@ -29,11 +48,28 @@ class HomeViewModel extends AutoDisposeNotifier<List<Location>?> {
     }
     return null;
   }
+
+  // 검색 기록 추가
+  void addSearchTerm(String term) {
+    final oldValue = state.searchTerms;
+    late final List<String> newValue;
+
+    if (oldValue == null) {
+      // 기존 검색 기록이 없으면 새로운 배열
+      newValue = [term];
+    } else {
+      // 기존 검색 기록 맨 앞에 추가
+      oldValue.remove(term);
+      newValue = [term, ...oldValue];
+    }
+
+    state = state.copyWith(searchTerms: newValue);
+  }
 }
 
 // 3. 뷰모델 관리자 만들기
 final homeViewModelProvider =
-    NotifierProvider.autoDispose<HomeViewModel, List<Location>?>(
+    NotifierProvider.autoDispose<HomeViewModel, HomeState>(
   () {
     return HomeViewModel();
   },

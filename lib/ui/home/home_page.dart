@@ -5,6 +5,7 @@ import 'package:local_search_app/core/snackbar_util.dart';
 import 'package:local_search_app/data/model/location.dart';
 import 'package:local_search_app/ui/detail/detail_page.dart';
 import 'package:local_search_app/ui/home/home_view_model.dart';
+import 'package:local_search_app/ui/home/widgets/home_page_bottomsheet.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   @override
@@ -25,12 +26,13 @@ class _HomePageState extends ConsumerState<HomePage> {
     // 뷰모델 읽기(read)
     final vm = ref.read(homeViewModelProvider.notifier);
     vm.searchLocations(query);
+    vm.addSearchTerm(query);
   }
 
   @override
   Widget build(BuildContext context) {
     // 값이 변경되는지 확인(watch)
-    final locations = ref.watch(homeViewModelProvider);
+    final state = ref.watch(homeViewModelProvider);
 
     return GestureDetector(
       onTap: () {
@@ -64,6 +66,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   if (findLocal != null) {
                     controller.text = findLocal;
                     vm.searchLocations(findLocal);
+                    vm.addSearchTerm(findLocal);
                   }
                 }
               },
@@ -79,22 +82,25 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
         body: Column(
           children: [
-            SizedBox(height: 20),
-            locations == null
-                ? SizedBox()
+            const SizedBox(height: 20),
+            state.locations == null
+                ? const SizedBox()
                 : Expanded(
                     child: ListView.separated(
-                      itemCount: locations.length,
+                      itemCount: state.locations!.length,
                       itemBuilder: (context, index) {
-                        return item(locations[index]);
+                        return item(state.locations![index]);
                       },
                       separatorBuilder: (context, index) {
-                        return SizedBox(height: 20);
+                        return const SizedBox(height: 20);
                       },
                     ),
                   ),
           ],
         ),
+        bottomSheet: state.searchTerms == null
+            ? const SizedBox()
+            : HomePageBottomsheet(state.searchTerms!),
       ),
     );
   }
