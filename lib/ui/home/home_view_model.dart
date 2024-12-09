@@ -35,7 +35,8 @@ class HomeViewModel extends AutoDisposeNotifier<HomeState> {
     final locationRepository = LocationRepository();
     final locationDatas = await locationRepository.findByAddress(query);
 
-    state = state.copyWith(locations: locationDatas);
+    final newValue = addSearchTerm(query);
+    state = HomeState(locations: locationDatas, searchTerms: newValue);
   }
 
   Future<String?> searchByLatLng(double lat, double lng) async {
@@ -50,7 +51,7 @@ class HomeViewModel extends AutoDisposeNotifier<HomeState> {
   }
 
   // 검색 기록 추가
-  void addSearchTerm(String term) {
+  List<String> addSearchTerm(String term) {
     final oldValue = state.searchTerms;
     late final List<String> newValue;
 
@@ -63,7 +64,14 @@ class HomeViewModel extends AutoDisposeNotifier<HomeState> {
       newValue = [term, ...oldValue];
     }
 
-    state = state.copyWith(searchTerms: newValue);
+    return newValue;
+  }
+
+  /// 검색 기록 삭제
+  void deleteSearchTerm(int index) {
+    state.searchTerms!.removeAt(index);
+
+    state = state.copyWith(searchTerms: state.searchTerms);
   }
 }
 

@@ -26,7 +26,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     // 뷰모델 읽기(read)
     final vm = ref.read(homeViewModelProvider.notifier);
     vm.searchLocations(query);
-    vm.addSearchTerm(query);
   }
 
   @override
@@ -66,7 +65,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                   if (findLocal != null) {
                     controller.text = findLocal;
                     vm.searchLocations(findLocal);
-                    vm.addSearchTerm(findLocal);
                   }
                 }
               },
@@ -98,9 +96,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
           ],
         ),
-        bottomSheet: state.searchTerms == null
+        // 검색 기록이 없으면 안 보여주기
+        bottomSheet: state.searchTerms == null || state.searchTerms!.isEmpty
             ? const SizedBox()
-            : HomePageBottomsheet(state.searchTerms!),
+            : HomePageBottomsheet(controller),
       ),
     );
   }
