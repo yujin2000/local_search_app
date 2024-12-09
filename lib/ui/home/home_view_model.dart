@@ -73,6 +73,11 @@ class HomeViewModel extends AutoDisposeNotifier<HomeState> {
 
     state = state.copyWith(searchTerms: state.searchTerms);
   }
+
+  /// 모든 검색 기록 삭제
+  void deleteAllSearchTerms() {
+    state = state.copyWith(searchTerms: []);
+  }
 }
 
 // 3. 뷰모델 관리자 만들기

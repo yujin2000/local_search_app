@@ -63,7 +63,7 @@ class HomePageBottomsheet extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return SearchResultPage();
+                            return SearchResultPage(onTapXIcon);
                           },
                         ),
                       );
