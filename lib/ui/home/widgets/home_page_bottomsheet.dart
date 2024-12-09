@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_search_app/ui/home/home_view_model.dart';
-import 'package:local_search_app/ui/search_result/search_result_page.dart';
+import 'package:local_search_app/ui/search_term//search_term_page.dart';
 
 class HomePageBottomsheet extends StatelessWidget {
   TextEditingController controller;
@@ -63,7 +63,7 @@ class HomePageBottomsheet extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return SearchResultPage(onTapXIcon);
+                            return SearchTermPage(onTapXIcon);
                           },
                         ),
                       );

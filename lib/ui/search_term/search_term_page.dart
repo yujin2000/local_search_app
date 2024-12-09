@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_search_app/ui/home/home_view_model.dart';
 
-class SearchResultPage extends StatelessWidget {
+class SearchTermPage extends StatelessWidget {
   void Function(int index, WidgetRef ref) onTapXIcon;
-  SearchResultPage(this.onTapXIcon);
+  SearchTermPage(this.onTapXIcon);
 
   @override
   Widget build(BuildContext context) {
