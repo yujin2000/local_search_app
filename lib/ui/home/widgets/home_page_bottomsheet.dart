@@ -57,9 +57,9 @@ class HomePageBottomsheet extends StatelessWidget {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: TextButton(
-                    child: Text('더 보기'),
-                    onPressed: () {
-                      Navigator.push(
+                    child: const Text('더 보기'),
+                    onPressed: () async {
+                      final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) {
@@ -67,6 +67,11 @@ class HomePageBottomsheet extends StatelessWidget {
                           },
                         ),
                       );
+                      // result == null -> 페이지 뒤로가기
+                      // result != null -> 검색 기록 받아옴
+                      if (result != null) {
+                        onTapTerm(result, ref);
+                      }
                     },
                   ),
                 ),
